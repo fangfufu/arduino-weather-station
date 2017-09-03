@@ -2,6 +2,10 @@
 The code for running this:
 https://www.fangfufu.co.uk/wiki/doku.php?id=public:raspberry_pi_weather_station_board
 
+## Implementation Notes
+The address for my BME280 sensor is `0x76` rather than the default `0x77`. You 
+need to change it in `Adafruit_BME280.h`.
+
 ## Compilation
 
     sudo apt-get install arduino arduino-mk
