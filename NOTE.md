@@ -1,5 +1,9 @@
 # Notes 
 
+## Useful links
+  - [https://github.com/sudar/Arduino-Makefile/tree/master/examples]
+  - [https://github.com/sudar/Arduino-Makefile/blob/master/examples/MakefileExample/Makefile-example.mk]
+
 ## Conversion formula
 
     1.Store a reference voltage (Vs) in the environment with less dust (for example clean box etc).

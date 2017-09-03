@@ -72,6 +72,6 @@ float PM25_vo_to_dust(float vo, float vref, float hum)
     } else {
         b = 1;
     }
-    pm25 = a * b * (vo - vref);
-    return;
+    float pm25 = a * b * (vo - vref);
+    return pm25;
 }

@@ -1,10 +1,12 @@
 #include "pm25.h"
+#include "Adafruit_BME280.h"
 
 /**
  * \file main.ino
  * \brief  Arduino weather station main source file
  */
 
+Adafruit_BME280 bme280;
 
 void setup()
 {
