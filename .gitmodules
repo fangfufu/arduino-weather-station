@@ -1,0 +1,3 @@
+[submodule "Adafruit_BME280_Library"]
+	path = Adafruit_BME280_Library
+	url = git@github.com:adafruit/Adafruit_BME280_Library.git
