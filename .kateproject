@@ -1,0 +1,9 @@
+{
+    "name": "Weather Station",
+    "files": [ { "git": 1 } ],
+    "build": {
+        "build": "make",
+        "clean": "make clean",
+        "upload" : "make upload"
+    }
+}
