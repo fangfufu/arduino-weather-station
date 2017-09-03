@@ -7,9 +7,10 @@ The address for my BME280 sensor is `0x76` rather than the default `0x77`. You
 need to change it in `Adafruit_BME280.h`.
 
 ## Compilation
-
-    sudo apt-get install arduino arduino-mk
-    make
+You need to download 
+[Arduino-Makefile](https://github.com/sudar/Arduino-Makefile), 
+and the latest version of Aruduino IDE. Please don't use the stuff shipped with 
+Debian, because they are outdated. 
 
 ## Upload to Arduino
 
