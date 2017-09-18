@@ -4,6 +4,7 @@
   - PM2.5 sensor calibration API
   - PM2.5 sensor measurement routine (e.g. how often do we recalibrate, what do
   we actually record?
+  - Learn how to use ctags
 
 ## Useful links
   - [https://github.com/sudar/Arduino-Makefile/tree/master/examples]

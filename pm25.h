@@ -21,13 +21,14 @@ float PM25_vo();
 void PM25_fan(int s);
 
 /**
- * \brief Convert voltage output to PM2.5 level
- * \param[in] vo the voltage output of the PM2.5 sensor
- * \param[in] vref the voltage of the PM2.5 sensor when it is dust free
- * \param[in] hum
- * \return PM2.5 level in μg/m3
+ * \brief Get the PM2.5 level 
  */
-float PM25_vo_to_dust(float vo, float vref, float hum);
+float PM25_dust();
+
+/**
+ * \brief Re-calibrate the sensor
+ */
+float PM25_recalibrate();
 
 #ifdef __cplusplus
 } // extern "C"

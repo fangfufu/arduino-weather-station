@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 
 #include "pm25.h"
 
@@ -15,17 +16,49 @@
 /** The VO measuring pin */
 #define VO_PIN     A6
 
+/** The reference output voltage */
+int g_fanState = 0;
+
+/** The status of the fan */
+int g_vref = -1;
+
+/** The status of the IR LED */
+int g_ledState = 0;
+
+/**
+ * \brief Convert voltage output to PM2.5 level
+ * \param[in] vo the voltage output of the PM2.5 sensor
+ * \param[in] vref the voltage of the PM2.5 sensor when it is dust free
+ * \param[in] hum
+ * \return PM2.5 level in μg/m3
+ */
+float PM25_vo_to_dust(float vo, float vref, float hum);
+
+
 /**
  * \note The IR LED is active low.
  */
 void PM25_LED(int s)
 {
-    s ? digitalWrite(LED_PIN, LOW) : digitalWrite(LED_PIN, HIGH);
+    if (s) {
+        digitalWrite(LED_PIN, LOW);
+        g_ledState = 1;
+    } else {
+        digitalWrite(LED_PIN, HIGH);
+        g_ledState = 0;
+    }
+        
 }
 
 void PM25_fan(int s)
 {
-    s ? digitalWrite(FAN_PIN, HIGH) : digitalWrite(FAN_PIN, LOW);
+    if (s) {
+        digitalWrite(FAN_PIN, HIGH);
+        g_fanState = 1;
+    } else {
+        digitalWrite(FAN_PIN, LOW);
+        g_fanState = 0;
+    }
 }
 
 void PM25_init()
