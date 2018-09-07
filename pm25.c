@@ -1,5 +1,9 @@
+/**
+ * \file pm25.c
+ * \todo write the calibration functions
+ */
+
 #include <Arduino.h>
-#include <EEPROM.h>
 
 #include "pm25.h"
 
@@ -16,6 +20,7 @@
 /** The VO measuring pin */
 #define VO_PIN     A6
 
+
 /** The reference output voltage */
 int g_fanState = 0;
 
@@ -29,10 +34,30 @@ int g_ledState = 0;
  * \brief Convert voltage output to PM2.5 level
  * \param[in] vo the voltage output of the PM2.5 sensor
  * \param[in] vref the voltage of the PM2.5 sensor when it is dust free
- * \param[in] hum
+ * \param[in] hum the humidity level in percentage, e.g. 50 for 50% 
  * \return PM2.5 level in μg/m3
+ * \note Copied straight from the datasheet
+ * Conversion formula (draft):
+ * P M2.5 level (μg/m3) = α × β ×（Vo[mV] – Vs[mV]）
+ * Note. Do not temperature correction, an estimates in actual environment.
+ * α ： Conversion factor in the true environment
+ * Recommendation ： 0.6
+ *  （β ： Humidity factor〔h=humidity(%)〕）
+ *  〔 β ＝ {1-0.01467(h-50)} (h>50) 〕
+ *  〔 β ＝ 1 (h≦50) 〕
  */
-float PM25_vo_to_dust(float vo, float vref, float hum);
+float PM25_vo_to_dust(float vo, float vref, float hum)
+{
+    float a = 0.6;
+    float b;
+    if (hum > 50) {
+        b = 1-0.01467 * (hum -50);
+    } else {
+        b = 1;
+    }
+    float pm25 = a * b * (vo - vref);
+    return pm25;
+}
 
 
 /**
@@ -47,7 +72,6 @@ void PM25_LED(int s)
         digitalWrite(LED_PIN, HIGH);
         g_ledState = 0;
     }
-        
 }
 
 void PM25_fan(int s)
@@ -85,26 +109,8 @@ float PM25_vo()
     return vo;
 }
 
-/**
- * \note Copied straight from the datasheet
- * Conversion formula (draft):
- * P M2.5 level (μg/m3) = α × β ×（Vo[mV] – Vs[mV]）
- * Note. Do not temperature correction, an estimates in actual environment.
- * α ： Conversion factor in the true environment
- * Recommendation ： 0.6
- *  （β ： Humidity factor〔h=humidity(%)〕）
- *  〔 β ＝ {1-0.01467(h-50)} (h>50) 〕
- *  〔 β ＝ 1 (h≦50) 〕
- */
-float PM25_vo_to_dust(float vo, float vref, float hum)
+float PM25_recalibrate()
 {
-    float a = 0.6;
-    float b;
-    if (hum > 50) {
-        b = 1-0.01467 * (hum -50);
-    } else {
-        b = 1;
-    }
-    float pm25 = a * b * (vo - vref);
-    return pm25;
+    return 0;
 }
+

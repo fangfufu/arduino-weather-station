@@ -1,5 +1,9 @@
 #ifndef PM25_H
 #define PM25_H
+/**
+ * \file pm25.h
+ * \brief PM2.5 sensor related functions
+ */
 
 #ifdef __cplusplus
 extern "C" {
