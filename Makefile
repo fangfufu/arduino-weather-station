@@ -1,5 +1,5 @@
 ARDMK_DIR        := $(HOME)/lib/Arduino-Makefile
-ARDUINO_DIR      := $(HOME)/lib/arduino-1.8.4
+ARDUINO_DIR      := $(HOME)/lib/arduino
 USER_LIB_PATH    := ./lib
 
 ARDUINO_LIBS     := Adafruit_BME280_Library Adafruit_Sensor Wire SPI EEPROM
