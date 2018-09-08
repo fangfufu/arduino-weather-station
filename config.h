@@ -15,7 +15,7 @@
  * \details This accounts for the voltage difference due to turning on the
  * fan pin
  */
-#define PM25_FUDGE      0.10
+#define PM25_FUDGE      0.25
 
 /** \brief The number of sample taken before computing the average */
 #define SAMPLE_COUNT 50
@@ -25,6 +25,6 @@
  * \details The number of milliseconds the fan has to spin before taking
  * measurement
  */
-#define FAN_SPIN_TIME 1000
+#define FAN_SPIN_TIME 15*1000
 
 #endif
