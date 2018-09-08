@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/* --------------------------- PM2.5 sensor related ------------------------- */
 /** \brief The fan's control pin */
 #define PM25_FAN_PIN    2
 
@@ -10,6 +9,13 @@
 
 /** \brief The VO measuring pin */
 #define PM25_VO_PIN     A6
+
+/**
+ * \brief PM2.5 fudge factor
+ * \details This accounts for the voltage difference due to turning on the
+ * fan pin
+ */
+#define PM25_FUDGE      0.10
 
 /** \brief The number of sample taken before computing the average */
 #define SAMPLE_COUNT 50

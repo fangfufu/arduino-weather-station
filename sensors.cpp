@@ -13,6 +13,7 @@ float pm25_vref;
 void sensors_calibrate()
 {
     PM25_set_fan_state(0);
+    pm25_vref = 0;
     for (int i = 0; i < SAMPLE_COUNT; i++) {
         pm25_vref += PM25_get_vo()/SAMPLE_COUNT;
     }
@@ -72,6 +73,7 @@ measure_t sensors_measure()
         m.hum += bme280.readHumidity()/SAMPLE_COUNT;
         m.vo += PM25_get_vo()/SAMPLE_COUNT;
     }
+    m.vo -= PM25_FUDGE;
     m.pm25 = PM25_vo_to_aerosol(m.vo, pm25_vref, m.hum);
     PM25_set_fan_state(0);
     return m;
