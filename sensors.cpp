@@ -6,63 +6,24 @@
 #include "sensors.hpp"
 #include "pm25_ll.hpp"
 #include "Adafruit_BME280.h"
-#include <EEPROM.h>
-
-
-struct CalibrationData{
-    float pm25_vref;
-};
 
 Adafruit_BME280 bme280;
-CalibrationData calibration_data;
-float pressure;
-float humidity;
-float temperature;
-float pm25_vo;
+float pm25_vref;
 
-
-static void save_calibration_data()
+void sensors_calibrate()
 {
-    EEPROM.put(CALIBRATION_DATA_ADDR, calibration_data);
-}
-
-static void load_calibration_data()
-{
-    EEPROM.get(CALIBRATION_DATA_ADDR, calibration_data);
+    PM25_set_fan_state(0);
+    for (int i = 0; i < SAMPLE_COUNT; i++) {
+        pm25_vref += PM25_get_vo()/SAMPLE_COUNT;
+    }
 }
 
 void sensors_init()
 {
-    load_calibration_data();
     PM25_init();
     bme280.begin();
-    PM25_fan(0);
-    sensors_measure();
-}
-
-void sensors_measure()
-{
-    pressure = 0;
-    humidity = 0;
-    temperature = 0;
-    int fan_state = PM25_get_fan_state();
-    /* Only update PM2.5 sensor measurement when the fan is spinning */
-    if (fan_state) {
-        pm25_vo = 0;
-    }
-    for (int i = 0; i < SAMPLE_COUNT; i++) {
-        temperature += bme280.readTemperature()/SAMPLE_COUNT;
-        pressure += bme280.readPressure()/SAMPLE_COUNT;
-        humidity += bme280.readHumidity()/SAMPLE_COUNT;
-        if (fan_state) {
-            pm25_vo += PM25_vo()/SAMPLE_COUNT;
-        }
-    }
-}
-
-void sensors_calibrate()
-{
-
+    PM25_set_fan_state(0);
+    sensors_calibrate();
 }
 
 /**
@@ -81,7 +42,7 @@ void sensors_calibrate()
  *  〔 β ＝ {1-0.01467(h-50)} (h>50) 〕
  *  〔 β ＝ 1 (h≦50) 〕
  */
-static float PM25_vo_to_dust(float vo, float vref, float hum)
+static float PM25_vo_to_aerosol(float vo, float vref, float hum)
 {
     float a = 0.6;
     float b;
@@ -93,3 +54,29 @@ static float PM25_vo_to_dust(float vo, float vref, float hum)
     float pm25 = a * b * (vo - vref);
     return pm25;
 }
+
+measure_t sensors_measure()
+{
+    measure_t m;
+    m.temp = 0;
+    m.pres = 0;
+    m.hum = 0;
+    m.vo = 0;
+    m.vref = pm25_vref;
+    PM25_set_fan_state(1);
+    delay(FAN_SPIN_TIME);
+
+    for (int i = 0; i < SAMPLE_COUNT; i++) {
+        m.temp += bme280.readTemperature()/SAMPLE_COUNT;
+        m.pres += bme280.readPressure()/SAMPLE_COUNT;
+        m.hum += bme280.readHumidity()/SAMPLE_COUNT;
+        m.vo += PM25_get_vo()/SAMPLE_COUNT;
+    }
+    m.pm25 = PM25_vo_to_aerosol(m.vo, pm25_vref, m.hum);
+    PM25_set_fan_state(0);
+    return m;
+}
+
+
+
+

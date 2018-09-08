@@ -20,9 +20,4 @@ float PM25_get_vo();
  */
 void PM25_set_fan_state(int s);
 
-/**
- * \brief Get the fan state of the PM2.5 sensor
- */
-int PM25_get_fan_state();
-
 #endif
